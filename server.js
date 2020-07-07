@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const contactRouter = require('./contacts/contacts.router');
+const contactRouter = require('./api/contacts/contacts.router');
 require('dotenv').config();
 
 module.exports = class ContactsServer {

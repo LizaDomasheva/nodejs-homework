@@ -18,8 +18,8 @@
     "nodemon": "^2.0.4"
   },
   "scripts": {
-    "start": "node api/start.js",
-    "dev": "nodemon api/start.js"
+    "start": "node start.js",
+    "dev": "nodemon start.js"
   },
   "repository": {
     "type": "git",
