@@ -1,0 +1,35 @@
+{
+  "name": "nodejs-homework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api/start.js",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.20",
+    "morgan": "^1.10.0",
+    "uuid": "^8.2.0",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "dev": "nodemon start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LizaDomasheva/nodejs-homework.git"
+  },
+  "keywords": [],
+  "author": "LizaDomasheva <lizidomasheva@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LizaDomasheva/nodejs-homework/issues"
+  },
+  "homepage": "https://github.com/LizaDomasheva/nodejs-homework#readme"
+}
