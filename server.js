@@ -33,7 +33,7 @@ module.exports = class ContactsServer {
   }
 
   initRouts() {
-    this.server.use('/api/contacts', contactRouter);
+    this.server.use('', contactRouter);
   }
 
   initError() {
@@ -44,6 +44,7 @@ module.exports = class ContactsServer {
       } = err;
 
       return res.status(status || 500).send(message);
+      
     });
   }
 
@@ -52,7 +53,8 @@ module.exports = class ContactsServer {
       await mongoose.connect(process.env.MONGODB_URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: true, 
+        useFindAndModify: false, 
+        useCreateIndex: true,
       });
       console.log("Database connection successful");
     } catch(err) {
