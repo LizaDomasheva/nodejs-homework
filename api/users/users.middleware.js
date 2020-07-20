@@ -19,9 +19,11 @@ exports.authorize = async (req, res, next) => {
   }
 
   const user = await User.findById(payload.id);
-  if (!user || user.token !== token) {
-    throw new UnauthorizedError();
-  }
+
+  //   if (!user || user.token !== token) {
+  //     throw new UnauthorizedError();
+  //   }
+
   req.user = user;
   req.token = token;
   next();

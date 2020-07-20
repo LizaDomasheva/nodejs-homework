@@ -11,6 +11,7 @@ require('dotenv').config();
 module.exports = class ContactsServer {
   constructor() {
     this.server = null;
+    this.app = null;
   }
   async start() {
     this.initServer();
@@ -65,7 +66,7 @@ module.exports = class ContactsServer {
   }
 
   startListening() {
-    this.server.listen(process.env.PORT, () => {
+    this.app = this.server.listen(process.env.PORT, () => {
       console.log('Server started listening on port', process.env.PORT);
     });
   }
