@@ -13,6 +13,7 @@ const userSchema = new Schema({
     required: true,
   },
   token: { type: String },
+  verificationToken: { type: String, required: false }
 });
 
 userSchema.plugin(mongoosePaginate);

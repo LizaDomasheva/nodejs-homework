@@ -19,6 +19,8 @@ const upload = multer({ storage });
 const userControllerProxy = createControllerProxy(UserController);
 
 userRouter.get('/users/current', authorize, userControllerProxy.getCurrentUser);
+userRouter.get('/auth/verify/:verificationToken', userControllerProxy.verifyUser);
+
 
 userRouter.patch(
   '/users/avatars',

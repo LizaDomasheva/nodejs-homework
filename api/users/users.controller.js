@@ -4,11 +4,12 @@ const fs = require('fs');
 const { promises: fsPromises } = require('fs');
 const jwt = require('jsonwebtoken');
 const Avatar = require('avatar-builder');
+const uuid = require('uuid');
 const User = require('./users.model');
 const {
   Types: { ObjectId },
 } = require('mongoose');
-
+const { emailingClient } = require('./emailing.client');
 
 class UserController {
   constructor() {
@@ -76,7 +77,12 @@ class UserController {
       subscription,
       password: passwordHash,
       avatarURL: avatarURL,
+      verificationToken: uuid.v4(),
     });
+
+    console.log('user :>> ', user);
+
+    await this.sendVerificationEmail(user);
 
     return res.status(201).json({
       user: {
@@ -102,6 +108,28 @@ class UserController {
     next();
   }
 
+  async sendVerificationEmail(user) {
+    const { email, verificationToken } = user;
+    const verifivationLink = `${process.env.SERVER_BASE_URL}/auth/verify/${verificationToken}`;
+    await emailingClient.sendVerificationEmail(email, verifivationLink);
+  }
+
+  async verifyUser(req, res, next) {
+    const { verificationToken } = req.params;
+    const user = await User.findOneAndUpdate(
+      { verificationToken },
+      {
+        verificationToken: null,
+      },
+    );
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    return res.status(200).send();
+  }
+
   validateId(req, res, next) {
     const { userId } = req.params;
     if (!ObjectId.isValid(userId)) {
@@ -117,7 +145,7 @@ class UserController {
     const user = await User.findUserByToken(token);
     const randomAvatarName = user.avatarURL.slice(29);
     const randomAvatarPath = `public\\${process.env.STATIC_BASE_URL}\\${randomAvatarName}`;
-    
+
     await fsPromises.unlink(randomAvatarPath);
     const avatarURL = `${process.env.SERVER_BASE_URL}/${process.env.STATIC_BASE_URL}/${req.file.filename}`;
     const updateUser = await User.findUserByIdAndUpdate(user._id, {
@@ -170,6 +198,10 @@ class UserController {
     const isPasswordValid = await bcryptjs.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).send('Email or password is wrong');
+    }
+
+    if(user.verificationToken){
+      return res.status(401).send('User is not verify')
     }
 
     const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
